@@ -28,7 +28,7 @@ from sqlalchemy.util import to_list
 
 from signals import Namespace
 
-from cache import cached
+from cache import cached, cached_property
 
 _camelcase_re = re.compile(r'([A-Z]+)(?=[a-z0-9])')
 
