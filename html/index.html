@@ -4,7 +4,7 @@
 <div id="post-list">
   {% if page_obj.items %}
    {% for post in page_obj.items %}
-  <p>{{post.title}}</p>
+  <a href="/xwlb/detail?day={{post.day.strftime('%Y%m%d')}}" target="_blank">{{post.title}}</p>
    {% end %}
 
 

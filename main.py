@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import urllib
+import datetime
 
 import logging
 import tornado.escape
@@ -23,12 +24,13 @@ define("port", default=8880, help="run on the given port", type=int)
 
 class MainHandler(tornado.web.RequestHandler):
 
-    def get_more_page(self):
-        self.render('more.html')
-
     def get_detail_page(self):
-
-        self.render('detail.html')
+        try:
+            day = datetime.datetime.strptime(self.get_argument('day'), '%Y%m%d')
+        except:
+            day = datetime.datetime.now().replace(hour=0, minute=0, seconds=0, microsecond=0)
+        news = News.query.get_by_day(day)
+        self.render('detail.html', news=news)
 
     def get_index_page(self):
         page = int(self.get_argument('page', 1))
@@ -39,9 +41,7 @@ class MainHandler(tornado.web.RequestHandler):
     
     def get(self, *args):
         api_or_page = args[0]
-        if api_or_page == 'more':
-            self.get_more_page()
-        elif api_or_page == 'detail':
+        if api_or_page == 'detail':
             self.get_detail_page()
         else:
             self.get_index_page()

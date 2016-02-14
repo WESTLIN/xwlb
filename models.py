@@ -381,7 +381,9 @@ class NewsQuery(BaseQuery):
 
     def index_page(self):
         return self.filter(News.num==0)
-    
+
+    def get_by_day(self, day):
+        return self.filter(News.day==day)
 
 class News(db.Model):
     __tablename__ = 'news_xwlb'
