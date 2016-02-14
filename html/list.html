@@ -7,8 +7,25 @@
    {{post.title}}
    {% end %}
 
-  {% module Paginate(page_obj, page_url) %}
-  
+
+  {% if page_obj.pages > 1 %}
+  <div class="pagination">
+
+  {% if page_obj.has_prev %}
+  <span class="prev">
+      <a href="{{ page_url(page_obj.page - 1) }}">&larr; 上一页</a>
+  </span>
+  {% end %}
+
+  {% if page_obj.has_next %}
+  <span class="next">
+      <a href="{{ page_url(page_obj.page + 1) }}"> 下一页 &rarr;</a>
+  </span>
+  {% end %}
+
+  </div>
+  {% end %}
+    
    {% else %}
    <div class="error-no-data">No news</div>
    {% end %}
