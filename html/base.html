@@ -7,94 +7,16 @@
     
     <title>Hello, World!</title>
     
-    <link rel="stylesheet" href="{{ reverse_url('theme_static','base.css') }}" />
-    <link rel="stylesheet" href="{{ static_url('js/uEditor1431/third-party/SyntaxHighlighter/shCoreDefault.css') }}" />
-    
     {% block css %}{% end %}
     <script type="text/javascript" src="{{ static_url('js/jquery.min.js') }}"></script>
-    <script type="text/javascript" src="{{ static_url('js/uEditor1431/third-party/SyntaxHighlighter/shCore.js') }}"></script>
-
-    <script type="text/javascript">
-    $(function(){
-        $("#go-to-top").click(function(){
-            $("html, body").animate({'scrollTop': 0}, 400);
-            return false;
-        });
-        $(window).scroll(function() {
-            var top = $(document).scrollTop();
-            var g = $("#go-to-top");
-            if (top > 300 && g.is(":hidden")) {
-                g.fadeIn();
-            } else if(top < 300 && g.is(":visible")) {
-                g.fadeOut();
-            }
-        });
-    })
-
-    SyntaxHighlighter.all();
-    </script>
     {% block js %}{% end %}
   </head>
 <body>
 <div id="wrap">
-    {% set messages = handler.get_flashed_messages() %}
-    {% if messages %}
-    <div id="flashed">
-        {% for category, msg in messages %}
-        <span class="flash-{{ category }}">{{ msg }}</span>
-        {% end %}
-    </div>
-    {% end %}
-    <div id="header">
-        <div class="inner">
-            <h1>Hello {% if current_user %} {{ current_user.nickname}} {% else %} World!{% end %}</h1>
-            <div id="nav">
-              <ul>
-                <li>
-                  <a href="/">Home</a>
-                </li>
-                <li>
-                  <a href="{{ reverse_url("tags") }}">Tags</a>
-                </li>
-                <li>
-                  <a href="{{ reverse_url("archives") }}">Articles</a>
-                </li>
-                <li>
-                  <a href="{{ reverse_url("about") }}">About</a>
-                </li>
-		<li>
-                {% block search %}
-                <div id="search" class="sidebar-module">
-                    <form action="{{ reverse_url('search') }}">
-                        <input name="q" type="text" class="text" />
-                    </form>
-                </div>
-                {% end %}
-		</li>
-		
-		{% if current_user %}
-                <li>
-                  <a href="{{ reverse_url("post") }}">POST</a>
-                </li>
-		{% end %}
-                <li class="current_user">
-                  {% if current_user %}
-                  <small><a href="/logout">Logout</a></small>
-                  {% else %}
-                  <small><a href="/login">Login</a></small>
-                  {% end %}
-                </li>
-              </ul>
-            </div>
-        </div>
-    </div>
     <div id="container">
       <div class="inner">
         <div class="content">
           {% block content %}{% end %}
-        </div>
-        <div class="sidebar">
-          {% block sidebar %}{% end %}
         </div>
       </div>
     </div>
