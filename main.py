@@ -29,8 +29,18 @@ class MainHandler(tornado.web.RequestHandler):
             day = datetime.datetime.strptime(self.get_argument('day'), '%Y%m%d')
         except:
             day = datetime.datetime.now().replace(hour=0, minute=0, seconds=0, microsecond=0)
+        next_day = day + datetime.timedelta(days=1)
+        prev_day = day - datetime.timedelta(days=1)
+        uri = self.request.uri[0:self.request.uri.find("?")]
+        next_url = uri + "?day=%s" % next_day.strftime("%Y%m%d")
+        prev_url = uri + "?day=%s" % prev_day.strftime("%Y%m%d")
+        if not News.query.exist(next_day):
+            next_url = None
+        if not News.query.exist(prev_day):
+            prev_url = None
         news = News.query.get_by_day(day)
-        self.render('detail.html', news=news)
+        
+        self.render('detail.html', news=news, next_url=next_url, prev_url=prev_url)
 
     def get_index_page(self):
         page = int(self.get_argument('page', 1))

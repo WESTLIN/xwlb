@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+    <div class="post-foot">
+      {% if prev_url %}<span class="prev"><a href="{{ prev_url }}">上一篇</a></span>{% end %}
+      {% if next_url %}<span class="next"><a href="{{ next_url }}">下一篇</a></span>{% end %}
+    </div>
 <div id="post-list">
 
   {% for post in news %}
@@ -12,4 +17,11 @@
   {% end %}
 
 </div>
+
+
+    <div class="post-foot">
+      {% if prev_url %}<span class="prev"><a href="{{ prev_url }}">上一篇</a></span>{% end %}
+      {% if next_url %}<span class="next"><a href="{{ next_url }}">下一篇</a></span>{% end %}
+    </div>
+
 {% end %}

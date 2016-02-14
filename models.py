@@ -385,6 +385,11 @@ class NewsQuery(BaseQuery):
     def get_by_day(self, day):
         return self.filter(News.day==day)
 
+    def exist(self, day):
+        return self.filter(News.day==day).count() > 0
+    
+
+
 class News(db.Model):
     __tablename__ = 'news_xwlb'
 
