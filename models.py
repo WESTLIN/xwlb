@@ -379,7 +379,8 @@ db = SQLAlchemy(DBURI)
         
 class NewsQuery(BaseQuery):
 
-    pass
+    def index_page(self):
+        return self.filter(News.num==0)
     
 
 class News(db.Model):
@@ -398,6 +399,8 @@ class News(db.Model):
     content = Column(TEXT)
     created_at = Column(TIMESTAMP, default=datetime.datetime.now)
     updated_at = Column(TIMESTAMP, default=datetime.datetime.now)
+
+    __mapper_args__ = {'order_by': day.desc()}
 
 
 if __name__ == "__main__":

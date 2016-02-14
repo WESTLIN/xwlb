@@ -32,7 +32,7 @@ class MainHandler(tornado.web.RequestHandler):
 
     def get_index_page(self):
         page = int(self.get_argument('page', 1))
-        page_obj = News.query.paginate(page=page, per_page=News.PER_PAGE)
+        page_obj = News.query.index_page().paginate(page=page, per_page=News.PER_PAGE)
         page_url = lambda page: self.request.uri[:self.request.uri.find("?")] + "?%s" % urllib.urlencode(dict(page=page))
         self.render('index.html', page_obj=page_obj, page_url=page_url)
 
