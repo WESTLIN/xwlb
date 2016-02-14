@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+
+import urllib
+
 import logging
 import tornado.escape
 import tornado.ioloop
@@ -24,11 +27,14 @@ class MainHandler(tornado.web.RequestHandler):
         self.render('more.html')
 
     def get_detail_page(self):
-        news = News.query.get
+
         self.render('detail.html')
 
     def get_index_page(self):
-        self.render('index.html')
+        page = int(self.get_argument('page', 1))
+        page_obj = News.query.paginate(page=page, per_page=News.PER_PAGE)
+        page_url = self.request.uri + "?%s" % urllib.urlencode(dict(page=page))
+        self.render('index.html', page_obj, page_url)
 
     
     def get(self, *args):
@@ -44,8 +50,8 @@ def main():
     tornado.options.parse_command_line()
     settings = dict(
         cookie_secret="__TODO:_GENERATE_YOUR_OWN_RANDOM_VALUE_HERE__",
-        template_path=os.path.join(os.path.dirname(__file__), "temp/html"),
-        static_path=os.path.join(os.path.dirname(__file__), "temp"),
+        template_path=os.path.join(os.path.dirname(__file__), "html"),
+        static_path=os.path.join(os.path.dirname(__file__), "html"),
         xsrf_cookies=True,
         debug=False,
     )

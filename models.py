@@ -216,6 +216,56 @@ class _ModelTableNameDescriptor(object):
             setattr(type, '__tablename__', tablename)
         return tablename
 
+class Pagination(object):
+
+    def __init__(self, query, page, per_page=20):
+        self.query = query
+        self.per_page = per_page
+        max_page = max(0, self.total - 1) // per_page + 1
+        self.page =  max_page if page > max_page  else page
+
+
+    @cached_property
+    def total(self):
+        return self.query.count()
+    
+    @cached_property
+    def items(self):
+        return self.query.offset((self.page - 1) * self.per_page).limit(self.per_page).all()
+
+    def iter_pages(self, left_edge=1, left_current=1,
+                   right_current=2, right_edge=1):
+        last = 0
+        for num in xrange(1, self.pages + 1):
+            if num <= left_edge or \
+               (num > self.page - left_current - 1 and \
+                num < self.page + right_current) or \
+               num > self.pages - right_edge:
+                if last + 1 != num:
+                    yield None
+                yield num
+                last = num
+    
+    @cached_property
+    def has_prev(self):
+        return self.page > 1
+    
+    @cached_property
+    def prev_num(self):
+        return self.page - 1
+    
+    @cached_property
+    def has_next(self):
+        return self.page < self.pages
+    
+    @cached_property
+    def next_num(self):
+        return self.page + 1
+    
+    @cached_property
+    def pages(self):
+        return max(0, self.total - 1) // self.per_page + 1
+
 
 
 class BaseQuery(orm.Query):
@@ -240,6 +290,18 @@ class BaseQuery(orm.Query):
         return rv
 
 
+    def paginate(self, page, per_page=20, error_out=True):
+        """Returns `per_page` items from page `page`.  By default it will
+        abort with 404 if no items were found and the page was larger than
+        1.  This behavor can be disabled by setting `error_out` to `False`.
+
+        Returns an :class:`Pagination` object.
+        """
+        if error_out and page < 1:
+            raise tornado.web.HTTPError(404)
+        return Pagination(self, page, per_page)
+
+    
 
 class Model(object):
     """Baseclass for custom user models."""
@@ -324,6 +386,8 @@ class News(db.Model):
     __tablename__ = 'news_xwlb'
 
     query_class = NewsQuery
+
+    PER_PAGE = 40
     
     id = Column(Integer, nullable=False, autoincrement=True, primary_key=True)
     num = Column(Integer, nullable=False)
