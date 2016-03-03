@@ -7,7 +7,7 @@ import urllib2
 import MySQLdb
 from bs4 import BeautifulSoup  # pip install beautifulsoup4
 
-URL_FORMAT = "http://cctv.cntv.cn/lm/xinwenlianbo/%s.shtml"
+URL_FORMAT = "http://tv.cctv.com/lm/xwlb/day/%s.shtml"
 
 
 def get_soup(url):
@@ -19,13 +19,8 @@ def get_data_by_day(someday):
     url = URL_FORMAT % someday.strftime("%Y%m%d")
     soup = get_soup(url)
 
-    div = soup.find(id="title_01")
-    if not div:
-        div = soup.find(id="SUBD1368521784291372")
-    if not div:
-        return []
 
-    a_list = div.findAll("a")
+    a_list = soup.findAll("a")
     data = []
     num = 0
     for a in a_list:
@@ -81,7 +76,7 @@ def close_db():
 
 USER = "yhyan"
 PASSWD = "yhyanP@55word"
-DB = "pypress"
+DB = "dosite"
 
 
 if __name__ == "__main__":

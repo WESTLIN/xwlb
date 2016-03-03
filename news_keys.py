@@ -71,7 +71,7 @@ def close_db():
 
 USER = "yhyan"
 PASSWD = "yhyanP@55word"
-DB = "pypress"
+DB = "dosite"
 
 
 if __name__ == "__main__":

@@ -332,7 +332,7 @@ class SQLAlchemy(object):
         >>> user_list = User.query.filter(db.and_(User.username=='test1', User.email.ilike('%@gmail.com'))).limit(10)
         
     """
-    def __init__(self, engine_url, echo=False, pool_recycle=60, pool_size=10,
+    def __init__(self, engine_url, echo=False, pool_recycle=7200, pool_size=10,
                  session_extensions=None, session_options=None):
         # create signals sender
         self.sender = str(uuid.uuid4())

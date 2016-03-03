@@ -17,12 +17,16 @@ from tornado.options import define, options, parse_command_line
 from tornado import template
 
 
-from models import News
+from models import News, db
 
 
 define("port", default=8880, help="run on the given port", type=int)
 
 class MainHandler(tornado.web.RequestHandler):
+
+    def on_finish(self):
+        db.session.remove()
+
 
     def get_detail_page(self):
         try:

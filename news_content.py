@@ -8,8 +8,8 @@ import MySQLdb
 from bs4 import BeautifulSoup  # pip install beautifulsoup4
 
 
-S_TAG = '<div class="body" id="content_body">'
-E_TAG = '</div>'
+S_TAG = '<!--repaste.body.begin-->'
+E_TAG = '<!--repaste.body.end-->'
 
 def get_soup(url):
     html = urllib2.urlopen(url).read()
@@ -85,7 +85,7 @@ def close_db():
 
 USER = "yhyan"
 PASSWD = "yhyanP@55word"
-DB = "pypress"
+DB = "dosite"
 
 
 if __name__ == "__main__":
